@@ -1,0 +1,19 @@
+# STM32 build files
+*.o
+*.d
+*.elf
+*.bin
+*.hex
+*.map
+*.lst
+build/
+Debug/
+Release/
+*.uvprojx
+*.uvoptx
+*.launch
+*.log
+
+# IDE settings
+.vscode/
+.settings/
