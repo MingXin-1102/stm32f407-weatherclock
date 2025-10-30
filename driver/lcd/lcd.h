@@ -7,7 +7,6 @@
 #include "delay.h"
 #include "font.h"
 #include "font_maple.h"
-// #include "log.h"
 
 #define RGB24_TO_RGB565(r, g, b)    (((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3))
 //LCD重要参数集
@@ -27,8 +26,6 @@ extern _lcd_dev_t lcddev;   //管理LCD重要参数
 // uint16_t  POINT_COLOR;//默认红色
 // uint16_t  BACK_COLOR; //背景颜色.默认为白色
 
-//////////////////////////////////////////////////////////////////////////////////
-//-----------------LCD端口定义----------------
 //#define    LCD_LED PBout(1)          //LCD背光             PB1
 //LCD地址结构体
 typedef struct
@@ -85,7 +82,8 @@ typedef struct
 #define LGRAYBLUE           0XA651 //浅灰蓝色(中间层颜色)
 #define LBBLUE              0X2B12 //浅棕蓝色(选择条目的反色)
 
-
+void lcd_gpio_init(void);
+void lcd_fsmc_init(void);
 void LCD_Init(void);
 void LCD_Display_Dir(uint8_t dir);
 void LCD_Clear(uint16_t color);
@@ -101,8 +99,6 @@ void LCD_ShowString(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uin
                     char *p, uint16_t color, uint16_t bgcolor, uint8_t mode);
 uint32_t LCD_Pow(uint8_t m,uint8_t n);
 void LCD_ShowNum(uint16_t x, uint16_t y, uint32_t num, uint8_t len, uint8_t size,uint16_t color,uint16_t bgcolor);
-// void LCD_ShowxNum2(uint16_t x,uint16_t y,uint32_t num,uint8_t len,uint8_t size,uint8_t mode);
-// // void LCD_ShowString(uint16_t x,uint16_t y,uint16_t width,uint16_t height,uint8_t size,uint8_t *p);
 void lcd_set_window(uint16_t x_start, uint16_t y_start, uint16_t x_end, uint16_t y_end);
 void LCD_ShowImage(uint16_t x, uint16_t y, uint16_t width, uint16_t height, const uint8_t *p);
 void LCD_ShowChinese(uint16_t x, uint16_t y, const uint8_t font_lib[][72],
@@ -122,10 +118,6 @@ void LCD_ShowChineseString(uint16_t x, uint16_t y, const uint8_t *str_index,
 
 void LCD_ShowASCIIChar(uint16_t x, uint16_t y, char c, uint16_t color, uint16_t bg_color, const FONT_INFO *font);
 void LCD_ShowASCIIString(uint16_t x, uint16_t y, const char *str, uint16_t color, uint16_t bg_color, const FONT_INFO *font);
-// void LCD_DrawFontChar(uint16_t x, uint16_t y, char ch, FontDef font, uint16_t color, uint16_t bgcolor);
-// void LCD_DrawFontString(uint16_t x, uint16_t y, const char *str, FontDef font, uint16_t color, uint16_t bgcolor);
-// void LCD_ShowASCIIChar(uint16_t x, uint16_t y, char c, uint16_t color, const FONT_INFO *font);
-// void LCD_ShowASCIIString(uint16_t x, uint16_t y, const char *str, uint16_t color, const FONT_INFO *font);
 
 void LCD_WR_REG(vu16 regval);
 void LCD_WR_DATA(vu16 data);

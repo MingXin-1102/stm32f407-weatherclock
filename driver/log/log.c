@@ -1,6 +1,5 @@
 #include "log.h"
 
-//-------------------- 日志打印 --------------------
 void log_printf(const char *fmt, ...)
 {
     rtc_date_time_t now;
@@ -16,7 +15,7 @@ void log_printf(const char *fmt, ...)
     va_end(args);
 }
 
-//-------------------- SNTP 校准 --------------------
+
 //typedef int __check_rtc_type_defined__[sizeof(rtc_date_time_t)];
 // void log_sntp_update(rtc_date_time_t *date_time)
 // {

@@ -1,8 +1,3 @@
-#include <stdbool.h>
-#include <stdint.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include "weather.h"
 
 bool parse_seniverse_response(const char *response, weather_info_t *info)

@@ -8,15 +8,15 @@
 		uint32_t timeout = TIMEOUT;                         \
 		while (!I2C_CheckEvent(I2C1, EVENT) && timeout > 0) \
 		{                                                   \
-			Delay_Us(10);                                   \
+			tim_delay_us(10);                                   \
 			timeout -= 10;                                  \
 		}                                                   \
 		if (timeout <= 10)                                  \
 			return false;                                   \
 	} while (0)
 
-extern const float temperture,humidity;
-extern const uint32_t failcount = 0;
+// extern const float temperture,humidity;
+// extern const uint32_t failcount = 0;
 
 
 static bool aht20_read_status(uint8_t *status);
@@ -28,9 +28,6 @@ static bool aht20_read(uint8_t data[], uint32_t length);
 bool aht20_init(void)
 {
 	/*SCL pin: PB6,SDA PB7*/
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C1, ENABLE);
-
 	GPIO_InitTypeDef GPIO_InitStruct;
 	GPIO_StructInit(&GPIO_InitStruct);
 	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7;
@@ -53,7 +50,7 @@ bool aht20_init(void)
 	I2C_Init(I2C1, &I2C_InitStruct);
 	I2C_Cmd(I2C1, ENABLE);
 
-	Delay_Ms(40);
+    vTaskDelay(pdMS_TO_TICKS(40));
 	if (aht20_is_ready())
 		return true;
 
@@ -62,7 +59,7 @@ bool aht20_init(void)
 
 	for (uint32_t t = 0; t < 100; t++)
 	{
-		Delay_Us(1000);
+		vTaskDelay(pdMS_TO_TICKS(5));
 		if (aht20_is_ready())
 			return true;
 	}
@@ -124,7 +121,6 @@ static bool aht20_is_busy(void)
 	if (!aht20_read_status(&status))
 		return false;
 
-	//&上最高位
 	return (status & 0x80) != 0;
 }
 static bool aht20_is_ready(void)
@@ -133,7 +129,6 @@ static bool aht20_is_ready(void)
 	if (!aht20_read_status(&status))
 		return false;
 
-	//&上最高位
 	return (status & 0x08) != 0;
 }
 
@@ -146,7 +141,7 @@ bool aht20_wait_for_measure(void)
 {
 	for (uint32_t t = 0; t < 200; t++)
 	{
-		Delay_Us(1000);
+		vTaskDelay((pdMS_TO_TICKS(10)));
 		if (!aht20_is_busy())
 			return true;
 	}
@@ -170,12 +165,4 @@ bool aht20_read_measurement(float *temperture,float *humidity)
 	return true ;
 }
 
-
-
-// int fputc(int ch,FILE *f)
-// {
-// 		USART_SendData(USART1, (uint8_t)ch);
-// 		while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET);
-// 		return ch;
-// }
 

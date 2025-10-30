@@ -5,52 +5,40 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 
 #include "stm32f4xx.h"
-//#include "rtc.h"
-#include "log.h"
-#include "delay.h"
-#include "esp_uart.h"
-#include "weather.h"
-#include "lcd.h"
-#include "image.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "semphr.h"
 
-#define RX_BUFFER_SIZE  1024
+typedef struct
+{
+	char ssid[64];
+	char bssid[18];
+	int channel;
+	int rssi;
+	bool connected;
+} esp_wifi_info_t;
 
-#define RX_RESULT_OK    0   /* AT命令返回OK */
-#define RX_RESULT_ERROR 1   /* AT命令返回ERROR */
-#define RX_RESULT_FAIL  2   /* 数据接收错误，缓存区满 */
-
+typedef struct
+{
+    uint16_t year;
+    uint8_t month;
+    uint8_t day;
+    uint8_t hour;
+    uint8_t minute;
+    uint8_t second;
+    uint8_t weekday;
+} esp_date_time_t;
 
 bool esp_at_init(void);
-bool esp_send_at(const char *cmd, const char **rsp, uint32_t *length, uint32_t timeout);
-
-
-bool esp_at_reset(void);
 bool esp_at_wifi_init(void);
-bool esp_at_wifi_connect(const char *ssid ,const char *pwd);
-bool esp_at_get_http(const char *url,uint32_t timeout);
-bool esp_at_get_weather(void);
+bool esp_at_connect_wifi(const char *ssid, const char *pwd, const char *mac);
+bool esp_at_get_wifi_info(esp_wifi_info_t *info);
+bool wifi_is_connected(void);
 bool esp_at_sntp_init(void);
-bool esp_at_sntp_get(void);
-
-
-bool parse_sntp_time(const char *resp, rtc_date_time_t *t);
-int sntp_update_rtc(const char *sntp_str, int timezone_offset);
-bool esp_at_fetch_sntp_time(void);
-bool parse_sntp_time(const char *resp, rtc_date_time_t *t);
-bool sntp_process_time(const char *sntp_str, int timezone_offset, rtc_date_time_t *result);
-
-bool sntp_perform_sync(int timezone_offset, int max_retries);
-void esp_at_sntp_sync(void);
-void esp_at_sntp_sync_with_timezone(int timezone_offset);
-bool esp_at_sntp_sync_ex(int timezone_offset, int max_retries);
-int sntp_update_rtc(const char *sntp_str, int timezone_offset);
-
-bool esp_at_get_time(uint32_t *timestamp);
-bool esp_at_wifi_get_ip(char ip[16]);
-bool esp_at_wifi_get_mac(char mac[18]);
+bool esp_at_sntp_get_time(esp_date_time_t *date);
+const char *esp_at_http_get(const char *url);
 
 
 #endif /* __ESP_AT_H */
