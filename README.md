@@ -46,10 +46,11 @@
 
 ---
 🚀 快速开始
+
 1️⃣ 克隆项目
 bash
 复制代码
-git clone https://github.com/MingXin-1102/SmartWeatherClock.git
+git clone https://github.com/MingXin-1102/stm32f407-weatherclock.git
 
 2️⃣ 打开工程
 使用 Keil 或 Vscode 打开项目文件。
